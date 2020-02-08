@@ -51,17 +51,18 @@ def listen_incoming():
 		(client, address) = SERVER.accept()
 		print(f" * {address} has connected.")
 		Thread(target=client_thread, args=(client, )).start()
-		
+
 def client_thread(c):
 	"""
 	Creates a thread per each client.
-	
+
 	Parameter:
-	c -- client socket connection 
+	c -- client socket connection
 	"""
 	username = c.recv(RECV_SIZE).decode("utf8") # get username
 	CLIENT_LIST[c] = username # add to client list
-	user_string = "<" + username + "> " # special format for chat
+	user_string = "<" + username + "> " # general message delivery
+	private_string = "[" + username + "] " # private message delivery
 	welcome_message = f" * You have connected to the server at {IP_ADDRESS}."
 	c.send(bytes(welcome_message, "utf8"))
 	join_message = f" * {username} has joined the server."
@@ -77,21 +78,39 @@ def client_thread(c):
 			break;
 		elif message.startswith("/me"): # action handler
 			send_all(message.replace("/me", " * " + username, 1))
+		elif message.startswith("@"):
+			if len(message.split(' ')) > 1: # only if there's a message to send
+				(user, str) = message.split(' ', 1)
+				str = private_string + str
+				send_user(str, user[1:])
 		else: # vanilla message
 			message = user_string + message
 			send_all(message)
-	
+
 def send_all(m):
 	"""
 	Sends a message to all connected clients.
-	
-	Parameters:
+
+	Parameter:
 	m -- the message to send
 	"""
 	for c in CLIENT_LIST:
 		# for each client, send message
 		c.send(bytes(m, "utf8"))
-	print(m)
+	print(m) # also send to server
+
+def send_user(m, u):
+	"""
+	Sends a message to a single client.
+
+	Parameters:
+	m -- the message to send
+	u -- the client to send to
+	"""
+	for c in CLIENT_LIST:
+		# only specific client/user
+		if CLIENT_LIST[c] == u:
+			c.send(bytes(m, "utf8"))
 
 if __name__ == "__main__":
 	print()

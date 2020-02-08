@@ -26,6 +26,6 @@ Where the arguments again are the IP address and port you'd wish to connect to. 
 
 # Usage
 
-After starting a client, it will prompt for a username. Send messages as you would in any other messenger program and type `/me` to perform an action or `/quit` to quit the server.
+After starting a client, it will prompt for a username. Send messages as you would in any other messenger program and type `/me` to perform an action or `/quit` to quit the server. You can also send a private message to another client by prepending a message with `@<username>`.
 
-Every client can see every message provided they are currently connected. The server will also output all communication it sees between clients.
+Every client can see every (non-private) message provided they are currently connected. The server will also output all (non-private) communication it sees between clients.
