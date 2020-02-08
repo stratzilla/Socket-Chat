@@ -9,7 +9,7 @@ if len(sys.argv) != 3:
 	print("\nExecute the script as below:")
 	print(" $ ./sock_server.py <IP Address> <Port>")
 	print("For example: `./sock_server.py 127.0.0.1 8008`.\n")
-	sys.exit(1) # exit with code denoting abnormality
+	sys.exit(1)
 
 SERVER = socket(AF_INET, SOCK_STREAM) # TCP
 IP_ADDRESS = str(sys.argv[1]) # IP address to connect to
